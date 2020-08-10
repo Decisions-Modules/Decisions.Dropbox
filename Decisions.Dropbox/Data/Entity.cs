@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace DropboxWebClientAPI.Models
+namespace Decisions.DropboxApi.Data
 {
     [DataContract]
     public class Entity

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Dropbox.Api.Sharing;
 
-namespace DropboxWebClientAPI.Models
+namespace Decisions.DropboxApi.Data
 {
     [DataContract]
     public class FileMeta
@@ -59,14 +59,17 @@ namespace DropboxWebClientAPI.Models
         /// owner display names cannot be fetched.</para>
         /// </summary>
         [DataMember]
-        public IList<string> OwnerDisplayNames { get; set; }
+        public string[] OwnerDisplayNames { get; set; }
 
         /// <summary>
         /// <para>The team that owns the file. This field is not present if the file is not
         /// owned by a team.</para>
         /// </summary>
         [DataMember]
-        public Dropbox.Api.Users.Team OwnerTeam { get; set; }
+        public string OwnerTeamId { get; set; }
+
+        [DataMember]
+        public string OwnerTeamName { get; set; }
 
         /// <summary>
         /// <para>The ID of the parent shared folder. This field is present only if the file is
@@ -94,7 +97,7 @@ namespace DropboxWebClientAPI.Models
         /// corresponds to the entries given in <see cref="P:Dropbox.Api.Sharing.GetFileMetadataBatchArg.Actions" /> or <see cref="P:Dropbox.Api.Sharing.GetFileMetadataArg.Actions" />.</para>
         /// </summary>
         [DataMember]
-        public IList<FilePermission> Permissions { get; set; }
+        public FilePermission[] Permissions { get; set; }
 
         /// <summary>
         /// <para>Timestamp indicating when the current user was invited to this shared file.

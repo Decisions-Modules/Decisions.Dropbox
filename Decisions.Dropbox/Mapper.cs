@@ -1,8 +1,9 @@
-﻿using Dropbox.Api.Files;
+﻿using Decisions.DropboxApi.Data;
+using Dropbox.Api.Files;
 using Dropbox.Api.Sharing;
-using DropboxWebClientAPI.Models;
+using System.Linq;
 
-namespace DropboxWebClientAPI
+namespace Decisions.DropboxApi
 {
     internal class Mapper
     {
@@ -28,9 +29,19 @@ namespace DropboxWebClientAPI
                 DisplayedName = obj.DisplayName
             };
         }
+        
+        internal static User Map(InviteeInfo invitee)
+        {
+            return new User
+            {
+                Email = invitee?.AsEmail?.Value,
+                DisplayedName = ""
+            };
+        }
 
         internal static FileMeta Map(SharedFileMetadata obj)
         {
+            if (obj == null) return null;
             return new FileMeta
             {
                 Id = obj.Id,
@@ -40,36 +51,41 @@ namespace DropboxWebClientAPI
                 AccessType = obj.AccessType,
                 ExpectedLinkMetadata = obj.ExpectedLinkMetadata,
                 LinkMetadata = obj.LinkMetadata,
-                OwnerDisplayNames = obj.OwnerDisplayNames,
-                OwnerTeam = obj.OwnerTeam,
+                OwnerDisplayNames = obj.OwnerDisplayNames?.ToArray(),
+                OwnerTeamId = obj.OwnerTeam?.Id,
+                OwnerTeamName = obj.OwnerTeam?.Name,
                 ParentSharedFolderId = obj.ParentSharedFolderId,
                 PathDisplay = obj.PathDisplay,
                 PathLower = obj.PathLower,
-                Permissions = obj.Permissions,
+                Permissions = obj.Permissions?.ToArray(),
                 TimeInvited = obj.TimeInvited
             };
         }
 
-        /*internal static FolderMeta Map(SharedFolderMetadata obj)
+        internal static FolderMeta Map(SharedFolderMetadata obj)
         {
-            return new FileMeta
+            if (obj == null) return null;
+            return new FolderMeta()
             {
-                Id = obj.Id,
                 Name = obj.Name,
                 Policy = obj.Policy,
                 PreviewUrl = obj.PreviewUrl,
-                AccessType = obj.AccessType,
-                ExpectedLinkMetadata = obj.ExpectedLinkMetadata,
+                SharedFolderId = obj.SharedFolderId,
+                TimeInvited = obj.TimeInvited,
                 LinkMetadata = obj.LinkMetadata,
-                OwnerDisplayNames = obj.OwnerDisplayNames,
-                OwnerTeam = obj.OwnerTeam,
+                Permissions = obj.Permissions?.ToArray(),
+                AccessInheritance = obj.AccessInheritance,
+                AccessType = obj.AccessType,
+                IsInsideTeamFolder = obj.IsInsideTeamFolder,
+                IsTeamFolder = obj.IsTeamFolder,
+                OwnerDisplayNames = obj.OwnerDisplayNames?.ToArray(),
+                OwnerTeamId = obj.OwnerTeam?.Id,
+                OwnerTeamName = obj.OwnerTeam?.Name,
                 ParentSharedFolderId = obj.ParentSharedFolderId,
-                PathDisplay = obj.PathDisplay,
                 PathLower = obj.PathLower,
-                Permissions = obj.Permissions,
-                TimeInvited = obj.TimeInvited
+                ParentFolderName = obj.ParentFolderName,
             };
-        }*/
 
+        }
     }
 }

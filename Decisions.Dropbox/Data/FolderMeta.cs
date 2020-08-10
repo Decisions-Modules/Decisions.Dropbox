@@ -45,7 +45,7 @@ namespace Decisions.DropboxApi.Data
 
 
         [DataMember]
-        public IList<string> OwnerDisplayNames { get; set; }
+        public string[] OwnerDisplayNames { get; set; }
 
         [DataMember]
         public string OwnerTeamId { get; set; }

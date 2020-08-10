@@ -41,6 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\DropBoxException.cs" />
+    <Compile Include="Data\FolderMeta.cs" />
+    <Compile Include="Data\Sharing.cs" />
     <Compile Include="DropBoxWebClientAPI.cs" />
     <Compile Include="Mapper.cs" />
     <Compile Include="Data\Entity.cs" />

@@ -3,7 +3,6 @@ using System.Linq;
 using Dropbox.Api;
 using Dropbox.Api.Sharing;
 using Dropbox.Api.TeamLog;
-using DropboxWebClientAPI;
 
 namespace Test
 {
