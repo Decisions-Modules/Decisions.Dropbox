@@ -7,14 +7,11 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Decisions.DropboxApi.Data
+namespace Decisions.DropboxApi
 {
     [DataContract]
     [JsonConverter(typeof(StringEnumConverter))]
     public enum DropBoxAccessLevel { owner, editor, viewer, viewer_no_comment }
 
     
-    class Sharing
-    {
-    }
 }

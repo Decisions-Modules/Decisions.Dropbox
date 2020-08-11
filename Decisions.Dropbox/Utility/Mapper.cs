@@ -1,5 +1,4 @@
-﻿using Decisions.DropboxApi.Data;
-using Dropbox.Api.Files;
+﻿using Dropbox.Api.Files;
 using Dropbox.Api.Sharing;
 using System.Linq;
 
@@ -7,48 +6,47 @@ namespace Decisions.DropboxApi
 {
     internal class Mapper
     {
-        internal static Entity Map(Metadata obj)
+        internal static DropboxResource Map(Metadata obj)
         {
-            return new Entity
+            return new DropboxResource
             {
                 Name = obj.Name,
                 IsDeleted = obj.IsDeleted,
-                IsFile = obj.IsFile,
-                IsFolder = obj.IsFolder,
+                ResourceType = obj.IsFolder ? DropboxResourceType.Folder : DropboxResourceType.File,
                 PathDisplay = obj.PathDisplay,
                 PathLower = obj.PathLower,
                 ParentSharedFolderId = obj.ParentSharedFolderId
             };
         }
 
-        internal static User Map(UserInfo obj)
+        internal static DropboxUser Map(UserInfo obj)
         {
-            return new User
+            return new DropboxUser
             {
                 Email = obj.Email,
                 DisplayedName = obj.DisplayName
             };
         }
         
-        internal static User Map(InviteeInfo invitee)
+        internal static DropboxUser Map(InviteeInfo invitee)
         {
-            return new User
+            return new DropboxUser
             {
                 Email = invitee?.AsEmail?.Value,
                 DisplayedName = ""
             };
         }
 
-        internal static FileMeta Map(SharedFileMetadata obj)
+        internal static DropboxFileMeta Map(SharedFileMetadata obj)
         {
             if (obj == null) return null;
-            return new FileMeta
+            return new DropboxFileMeta
             {
                 Id = obj.Id,
                 Name = obj.Name,
                 Policy = obj.Policy,
                 PreviewUrl = obj.PreviewUrl,
-                AccessType = obj.AccessType,
+                AccessType = Map(obj.AccessType),
                 ExpectedLinkMetadata = obj.ExpectedLinkMetadata,
                 LinkMetadata = obj.LinkMetadata,
                 OwnerDisplayNames = obj.OwnerDisplayNames?.ToArray(),
@@ -62,10 +60,18 @@ namespace Decisions.DropboxApi
             };
         }
 
-        internal static FolderMeta Map(SharedFolderMetadata obj)
+        internal static DropBoxAccessLevel Map(AccessLevel al)
+        {
+            if(al.IsEditor) return DropBoxAccessLevel.editor;
+            if(al.IsOwner) return DropBoxAccessLevel.owner;
+            if(al.IsViewerNoComment) return DropBoxAccessLevel.viewer_no_comment;
+            return DropBoxAccessLevel.viewer;
+        }
+
+        internal static DropboxFolderMeta Map(SharedFolderMetadata obj)
         {
             if (obj == null) return null;
-            return new FolderMeta()
+            return new DropboxFolderMeta()
             {
                 Name = obj.Name,
                 Policy = obj.Policy,

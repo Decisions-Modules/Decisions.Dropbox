@@ -1,6 +1,4 @@
-﻿using Decisions.DropboxApi;
-using Decisions.DropboxApi.Data;
-using DecisionsFramework.ServiceLayer.Services.Document;
+﻿using DecisionsFramework.ServiceLayer.Services.Document;
 using DecisionsFramework.ServiceLayer.Services.Folder;
 using Dropbox.Api.Files;
 using Dropbox.Api.Sharing;
@@ -54,7 +52,7 @@ namespace Decisions.DropboxApi.TestSuit
 
             var entity = DropBoxWebClientAPI.CreateFolder(Token.AccessToken, testFolderPath);
 
-            Assert.IsTrue(entity.IsFolder);
+            Assert.IsTrue(entity.ResourceType == DropboxResourceType.Folder);
 
         }
 
@@ -125,11 +123,11 @@ namespace Decisions.DropboxApi.TestSuit
             try
             {
                 var filemeta = DropBoxWebClientAPI.UploadFile(Token.AccessToken, TestData.LocalTestFile, "");
-                Assert.IsTrue(filemeta.IsFile);
+                Assert.IsTrue(filemeta.ResourceType == DropboxResourceType.File);
                 DropBoxWebClientAPI.DeleteResource(Token.AccessToken, filemeta.PathDisplay);
 
                 var filemeta2 = DropBoxWebClientAPI.UploadFile(Token.AccessToken, TestData.LocalTestFile, TestData.TestFolder);
-                Assert.IsTrue(filemeta2.IsFile);
+                Assert.IsTrue(filemeta2.ResourceType == DropboxResourceType.File);
                 DropBoxWebClientAPI.DownloadFile(Token.AccessToken, remoteFile, TestData.LocalDownloadTestDirectory);
                 Assert.IsTrue(System.IO.File.Exists(TestData.LocalDownloadTestFile));
             }
@@ -157,7 +155,7 @@ namespace Decisions.DropboxApi.TestSuit
                 {
                     DropBoxWebClientAPI.DeleteResource(Token.AccessToken, TestData.RemoteNonExistentFile);
                 }
-                catch (Dropbox.Api.ApiException<Dropbox.Api.Files.DeleteError> ex)
+                catch (Dropbox.Api.ApiException<Dropbox.Api.Files.DeleteError>)
                 {
                     deleteError = true;
                 }
@@ -181,7 +179,7 @@ namespace Decisions.DropboxApi.TestSuit
         [TestMethod]
         public void ShareFolderTest()
         {
-            FolderMeta sharedMeta1 = null, sharedMetaAgain1, sharedMeta2 = null;
+            DropboxFolderMeta sharedMeta1 = null, sharedMetaAgain1, sharedMeta2 = null;
 
             try
             {
@@ -195,7 +193,7 @@ namespace Decisions.DropboxApi.TestSuit
             }
             finally
             {
-                var sharedFolderList = DropBoxWebClientAPI.GetFoldersSharingSettings(Token.AccessToken);
+                var sharedFolderList = DropBoxWebClientAPI.GetAllFoldersSharingSettings(Token.AccessToken);
                 foreach (var folder in sharedFolderList)
                 {
                     if (TestData.TestFolder.Contains(folder.Name))
@@ -222,7 +220,7 @@ namespace Decisions.DropboxApi.TestSuit
             string fileUrl = DropBoxWebClientAPI.CreateSharedLink(Token.AccessToken, remoteFile);
             Assert.IsNotNull(fileUrl);
 
-            FileMeta fileMeta = DropBoxWebClientAPI.GetFileSharingSettings(Token.AccessToken, remoteFile);
+            DropboxFileMeta fileMeta = DropBoxWebClientAPI.GetFileSharingSettings(Token.AccessToken, remoteFile);
             DropBoxWebClientAPI.RevokeSharedLink(Token.AccessToken, fileUrl);
 
             bool revokeError = false;
@@ -241,10 +239,10 @@ namespace Decisions.DropboxApi.TestSuit
         public void FileMemberTest()
         {
             string remoteFile = UploadTestFile();
-            User[] users0 = DropBoxWebClientAPI.FileMembersArray(Token.AccessToken, remoteFile, 1);
+            DropboxUser[] users0 = DropBoxWebClientAPI.FileMembersArray(Token.AccessToken, remoteFile, 1);
 
             DropBoxWebClientAPI.AddMembersToFile(Token.AccessToken, remoteFile, DropBoxAccessLevel.viewer, TestData.TestEmails);
-            User[] users2 = DropBoxWebClientAPI.FileMembersArray(Token.AccessToken, remoteFile, 1);
+            DropboxUser[] users2 = DropBoxWebClientAPI.FileMembersArray(Token.AccessToken, remoteFile, 1);
             Assert.IsTrue(users2.Length >= TestData.TestEmails.Length);
             foreach (var email in TestData.TestEmails)
             {
@@ -253,11 +251,11 @@ namespace Decisions.DropboxApi.TestSuit
             }
 
             DropBoxWebClientAPI.RemoveMemberFromFile(Token.AccessToken, remoteFile, TestData.TestEmails[0]);
-            User[] users3 = DropBoxWebClientAPI.FileMembersArray(Token.AccessToken, remoteFile);
+            DropboxUser[] users3 = DropBoxWebClientAPI.FileMembersArray(Token.AccessToken, remoteFile);
             Assert.AreEqual(users2.Length, users3.Length + 1);
 
             DropBoxWebClientAPI.UnshareFile(Token.AccessToken, remoteFile);
-            User[] noUsers = DropBoxWebClientAPI.FileMembersArray(Token.AccessToken, remoteFile);
+            DropboxUser[] noUsers = DropBoxWebClientAPI.FileMembersArray(Token.AccessToken, remoteFile);
             foreach (var email in TestData.TestEmails)
             {
                 var foundEmail = noUsers.FirstOrDefault((it) => { return it.Email == email; });
@@ -271,10 +269,10 @@ namespace Decisions.DropboxApi.TestSuit
             DropBoxWebClientAPI.ShareFolder(Token.AccessToken, TestData.TestFolder, 10000, false);
             try
             {
-                User[] users0 = DropBoxWebClientAPI.FolderMembersArray(Token.AccessToken, TestData.TestFolder, 1);
+                DropboxUser[] users0 = DropBoxWebClientAPI.FolderMembersArray(Token.AccessToken, TestData.TestFolder, 1);
 
                 DropBoxWebClientAPI.AddMembersToFolder(Token.AccessToken, TestData.TestFolder, DropBoxAccessLevel.viewer, TestData.TestEmails);
-                User[] users2 = DropBoxWebClientAPI.FolderMembersArray(Token.AccessToken, TestData.TestFolder, 1);
+                DropboxUser[] users2 = DropBoxWebClientAPI.FolderMembersArray(Token.AccessToken, TestData.TestFolder, 1);
                 Assert.IsTrue(users2.Length >= TestData.TestEmails.Length);
                 foreach (var email in TestData.TestEmails)
                 {
@@ -283,11 +281,11 @@ namespace Decisions.DropboxApi.TestSuit
                 }
 
                 DropBoxWebClientAPI.RemoveMemberFromFolder(Token.AccessToken, TestData.TestFolder, TestData.TestEmails[0]);
-                User[] users3 = DropBoxWebClientAPI.FolderMembersArray(Token.AccessToken, TestData.TestFolder);
-                Assert.AreEqual(users2.Length, users3.Length + 1);
+                DropboxUser[] users3 = DropBoxWebClientAPI.FolderMembersArray(Token.AccessToken, TestData.TestFolder);
+                Assert.AreEqual(users2.Length-1, users3.Length);
 
                 DropBoxWebClientAPI.UnshareFolder(Token.AccessToken, TestData.TestFolder);
-                User[] noUsers = DropBoxWebClientAPI.FolderMembersArray(Token.AccessToken, TestData.TestFolder);
+                DropboxUser[] noUsers = DropBoxWebClientAPI.FolderMembersArray(Token.AccessToken, TestData.TestFolder);
                 foreach (var email in TestData.TestEmails)
                 {
                     var foundEmail = noUsers.FirstOrDefault((it) => { return it.Email == email; });

@@ -6,10 +6,10 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Decisions.DropboxApi.Data
+namespace Decisions.DropboxApi
 {
     [DataContract]
-    public class FolderMeta
+    public class DropboxFolderMeta
     {
         [DataMember]
         public string Name { get; set; }

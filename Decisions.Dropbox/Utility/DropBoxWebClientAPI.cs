@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using Decisions.DropboxApi.Data;
 using Dropbox.Api;
 using Dropbox.Api.Async;
 using Dropbox.Api.CloudDocs;
@@ -13,9 +12,9 @@ using Dropbox.Api.Sharing;
 
 namespace Decisions.DropboxApi
 {
-    public static class DropBoxWebClientAPI
+    public static partial class DropBoxWebClientAPI
     {
-        public static Entity CreateFolder(string token, string path)
+        public static DropboxResource CreateFolder(string token, string path)
         {
             using (var client = new DropboxClient(token))
             {
@@ -24,35 +23,7 @@ namespace Decisions.DropboxApi
             }
         }
 
-        private static void CorrectDropboxPath(ref string path)
-        {
-            if (path == null) path = "";
-            path = path.Replace(Path.DirectorySeparatorChar, '/');
-        }
-
-        private static List<Metadata> GetFolderContext(string token, string path, uint? limit = null)
-        {
-            CorrectDropboxPath(ref path);
-
-            if (path == "/") // DropBox wants the empty string for the root directory
-                path = "";
-
-            var res = new List<Metadata>();
-            using (var client = new DropboxClient(token))
-            {
-                ListFolderResult allItems = client.Files.ListFolderAsync(path, limit: limit).Result;
-                res.AddRange(allItems.Entries);
-
-                while (allItems.HasMore)
-                {
-                    allItems = client.Files.ListFolderContinueAsync(new ListFolderContinueArg(allItems.Cursor)).Result;
-                    res.AddRange(allItems.Entries);
-                }
-            }
-            return res;
-        }
-
-        public static Entity[] GetFoldersArray(string token, string path, uint? limit = null)
+        public static DropboxResource[] GetFoldersArray(string token, string path, uint? limit = null)
         {
             var folderContext = GetFolderContext(token, path, limit);
 
@@ -61,7 +32,7 @@ namespace Decisions.DropboxApi
             return listOfFolders.Select(Mapper.Map).ToArray();
         }
 
-        public static Entity[] GetFilesArray(string token, string path, uint? limit = null)
+        public static DropboxResource[] GetFilesArray(string token, string path, uint? limit = null)
         {
             var folderContext = GetFolderContext(token, path, limit);
 
@@ -104,17 +75,17 @@ namespace Decisions.DropboxApi
             }
         }
 
-        public static Entity UploadFile(string token, string fileForUploadingFullPathWithExtension, string dropboxPath)
+        public static DropboxResource UploadFile(string token, string fileForUploadingFullPathWithExtension, string dropboxFolderPath)
         {
-            CorrectDropboxPath(ref dropboxPath);
-            if (string.IsNullOrEmpty(dropboxPath) || dropboxPath.Last() != '/')
-                dropboxPath += '/';
+            CorrectDropboxPath(ref dropboxFolderPath);
+            if (string.IsNullOrEmpty(dropboxFolderPath) || dropboxFolderPath.Last() != '/')
+                dropboxFolderPath += '/';
 
             using (var client = new DropboxClient(token))
             {
                 var fileName = Path.GetFileName(fileForUploadingFullPathWithExtension);
 
-                FileMetadata file = client.Files.UploadAsync($"{dropboxPath}{fileName}",
+                FileMetadata file = client.Files.UploadAsync($"{dropboxFolderPath}{fileName}",
                         new WriteMode().AsOverwrite,
                         false, DateTime.Now, false, null, false,
                         new StreamReader(fileForUploadingFullPathWithExtension).BaseStream)
@@ -148,42 +119,20 @@ namespace Decisions.DropboxApi
             }
         }
 
-        public static FileMeta GetFileSharingSettings(string token, string filePath)
+        public static DropboxFileMeta GetFileSharingSettings(string token, string filePath)
         {
             CorrectDropboxPath(ref filePath);
             using (var client = new DropboxClient(token))
             {
-
                 SharedFileMetadata result = client.Sharing.GetFileMetadataAsync(filePath).GetAwaiter().GetResult();
                 return Mapper.Map(result);
             }
         }
 
         /// <summary>
-        ///     Get sharing settings for ALL folders
-        /// </summary>
-        public static SharedFolderMetadata[] GetFoldersSharingSettings(string token, int limit = 1000)
-        {
-            using (var client = new DropboxClient(token))
-            {
-                var resultList = new List<SharedFolderMetadata>();
-
-                ListFoldersResult result;
-                do
-                {
-                    result = client.Sharing.ListFoldersAsync().GetAwaiter().GetResult();
-                    resultList.AddRange(result.Entries);
-                }
-                while (result.Cursor != null && resultList.Count < limit);
-
-                return resultList.ToArray();
-            }
-        }
-
-        /// <summary>
         ///     Get sharing settings for SPECIFIC folder by it's id
         /// </summary>
-        public static FolderMeta GetFolderSharingSettings(string token, string sharedFolder)
+        public static DropboxFolderMeta GetFolderSharingSettings(string token, string sharedFolder)
         {
             CorrectDropboxPath(ref sharedFolder);
             using (var client = new DropboxClient(token))
@@ -194,35 +143,20 @@ namespace Decisions.DropboxApi
             }
         }
 
-        public static FolderMeta ShareFolder(string token, string folder, int millisecondsTimeout = 10000, bool forceAsync = false)
+        public static DropboxFolderMeta ShareFolder(string token, string folder, int millisecondsTimeout = 10000, bool forceAsync = false)
         {
             CorrectDropboxPath(ref folder);
 
             using (var client = new DropboxClient(token))
             {
-                var shareFolderLaunch = client.Sharing.ShareFolderAsync(folder, forceAsync: forceAsync).Result;
+                ShareFolderLaunch shareFolderLaunch = client.Sharing.ShareFolderAsync(folder, forceAsync: forceAsync).Result;
 
                 SharedFolderMetadata sfm = shareFolderLaunch.AsComplete?.Value;
                 if (shareFolderLaunch.IsAsyncJobId)
                 {
                     string jobId = shareFolderLaunch.AsAsyncJobId.Value;
-                    Stopwatch stopWatch = new Stopwatch();
-                    stopWatch.Start();
-
+                    WaitForJob(client, jobId, millisecondsTimeout);
                     ShareFolderJobStatus jobStatus = client.Sharing.CheckShareJobStatusAsync(jobId).Result;
-
-                    while (jobStatus.IsInProgress && stopWatch.ElapsedMilliseconds < millisecondsTimeout)
-                    {
-                        Thread.Sleep(1000);
-                        jobStatus = client.Sharing.CheckShareJobStatusAsync(jobId).Result;
-                    }
-
-                    if (jobStatus.IsFailed)
-                    {
-                        var str = jobStatus.AsFailed.Value.ToString();
-                        throw new DropBoxException(str);
-                    }
-
                     sfm = jobStatus.AsComplete?.Value;
                 }
 
@@ -235,35 +169,13 @@ namespace Decisions.DropboxApi
             using (var client = new DropboxClient(token))
             {
                 string sharedFolderId = GetSharedFolderId(client, sharedFolder);
-
                 LaunchEmptyResult unshareFolderLaunch = client.Sharing.UnshareFolderAsync(sharedFolderId).GetAwaiter().GetResult();
 
                 if (!unshareFolderLaunch.IsComplete)
                 {
-                    Stopwatch stopWatch = new Stopwatch();
-                    stopWatch.Start();
                     string jobId = unshareFolderLaunch.AsAsyncJobId.Value;
-                    JobStatus jobStatus = client.Sharing.CheckJobStatusAsync(jobId).Result;
-                    while (jobStatus.IsInProgress && stopWatch.ElapsedMilliseconds < millisecondsTimeout)
-                    {
-                        Thread.Sleep(1000);
-                        jobStatus = client.Sharing.CheckJobStatusAsync(jobId).Result;
-                    }
-
-                    if (jobStatus.IsFailed)
-                    {
-                        var str = jobStatus.AsFailed.Value.ToString();
-                        throw new DropBoxException(str);
-                    }
+                    WaitForJob(client, jobId, millisecondsTimeout);
                 }
-            }
-        }
-
-        public static void UnshareFolderById(string token, string sharedFolderId)
-        {
-            using (var client = new DropboxClient(token))
-            {
-                client.Sharing.UnshareFolderAsync(sharedFolderId).GetAwaiter().GetResult();
             }
         }
 
@@ -287,29 +199,6 @@ namespace Decisions.DropboxApi
                 client.Sharing.RevokeSharedLinkAsync(url).Wait();
             };
 
-        }
-
-        private static AccessLevel GetAccessLevel(DropBoxAccessLevel? dropBoxAccessLevel)
-        {
-            AccessLevel accessLevel = AccessLevel.Viewer.Instance;
-
-            if (dropBoxAccessLevel != null)
-                switch (dropBoxAccessLevel)
-                {
-                    case DropBoxAccessLevel.editor:
-                        accessLevel = AccessLevel.Editor.Instance;
-                        break;
-                    case DropBoxAccessLevel.owner:
-                        accessLevel = AccessLevel.Owner.Instance;
-                        break;
-                    case DropBoxAccessLevel.viewer:
-                        accessLevel = AccessLevel.Viewer.Instance;
-                        break;
-                    case DropBoxAccessLevel.viewer_no_comment:
-                        accessLevel = AccessLevel.ViewerNoComment.Instance;
-                        break;
-                }
-            return accessLevel;
         }
 
         public static void AddMembersToFile(string token, string pathToFile, DropBoxAccessLevel? dropBoxAccessLevel, params string[] emails)
@@ -342,7 +231,7 @@ namespace Decisions.DropboxApi
             }
         }
 
-        public static User[] FileMembersArray(string token, string path, uint limit = 100)
+        public static DropboxUser[] FileMembersArray(string token, string path, uint limit = 100)
         {
             var users = new List<UserFileMembershipInfo>();
             var invitees = new List<InviteeMembershipInfo>();
@@ -391,22 +280,26 @@ namespace Decisions.DropboxApi
                 string sharedFolderId = GetSharedFolderId(client, sharedFolder);
                 client.Sharing.AddFolderMemberAsync(sharedFolderId, membersEmails).GetAwaiter().GetResult();
             }
-
         }
 
-        public static void RemoveMemberFromFolder(string token, string sharedFolder, string memberEmail)
+        public static void RemoveMemberFromFolder(string token, string sharedFolder, string memberEmail, int millisecondsTimeout = 10000 )
         {
             CorrectDropboxPath(ref sharedFolder);
 
             using (var client = new DropboxClient(token))
             {
                 string sharedFolderId = GetSharedFolderId(client, sharedFolder);
-                client.Sharing.RemoveFolderMemberAsync(sharedFolderId, new MemberSelector.Email(memberEmail),
-                    false).GetAwaiter().GetResult();
+                LaunchResultBase removeLaunch = client.Sharing.RemoveFolderMemberAsync(sharedFolderId, new MemberSelector.Email(memberEmail), false).Result;
+
+                if (removeLaunch.IsAsyncJobId)
+                {
+                    string jobId = removeLaunch.AsAsyncJobId.Value;
+                    WaitForJob(client, jobId, millisecondsTimeout);
+                }
             }
         }
 
-        public static User[] FolderMembersArray(string token, string sharedFolder, uint limit = 100)
+        public static DropboxUser[] FolderMembersArray(string token, string sharedFolder, uint limit = 100)
         {
             using (var client = new DropboxClient(token))
             {
@@ -435,23 +328,7 @@ namespace Decisions.DropboxApi
             }
         }
 
-        private static string GetSharedFolderIdOrNull(DropboxClient client, string sharedFolder)
-        {
-            Metadata metadata = client.Files.GetMetadataAsync(sharedFolder).Result;
-            if (metadata.AsFolder == null)
-                throw new DropBoxException($"{sharedFolder} is not a folder.");
 
-            return metadata.AsFolder.SharedFolderId;
-        }
-
-        private static string GetSharedFolderId(DropboxClient client, string sharedFolder)
-        {
-            string sharedFolderId = GetSharedFolderIdOrNull(client, sharedFolder);
-            if (sharedFolderId == null)
-                throw new DropBoxException($"{sharedFolder} is not shared.");
-
-            return sharedFolderId;
-        }
 
     }
 }

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Dropbox.Api.Sharing;
 
-namespace Decisions.DropboxApi.Data
+namespace Decisions.DropboxApi
 {
     [DataContract]
-    public class FileMeta
+    public class DropboxFileMeta
     {
         /// <summary>
         /// <para>The ID of the file.</para>
@@ -36,7 +36,7 @@ namespace Decisions.DropboxApi.Data
         /// <para>The current user's access level for this shared file.</para>
         /// </summary>
         [DataMember]
-        public AccessLevel AccessType { get; set; }
+        public DropBoxAccessLevel AccessType { get; set; }
 
         /// <summary>
         /// <para>The expected metadata of the link associated for the file when it is first
@@ -107,4 +107,11 @@ namespace Decisions.DropboxApi.Data
         [DataMember]
         public DateTime? TimeInvited { get; set; }
     }
+
+   /* FolderPolicy
+    DropBoxAccessLevel    AccessLevel
+        ExpectedSharedContentLinkMetadata
+        SharedContentLinkMetadata
+        FilePermission*/
+
 }

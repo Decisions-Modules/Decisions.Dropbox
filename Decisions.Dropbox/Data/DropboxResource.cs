@@ -1,15 +1,18 @@
-﻿using System.Runtime.Serialization;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System.Runtime.Serialization;
 
-namespace Decisions.DropboxApi.Data
+namespace Decisions.DropboxApi
 {
     [DataContract]
-    public class Entity
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum DropboxResourceType { Unavailable = 0, File = 1, Folder = 2 }
+
+    [DataContract]
+    public class DropboxResource
     {
         [DataMember]
-        public bool IsFile { get; set; }
-
-        [DataMember]
-        public bool IsFolder { get; set; }
+        public DropboxResourceType ResourceType { get; set; }
 
         [DataMember]
         public bool IsDeleted { get; set; }

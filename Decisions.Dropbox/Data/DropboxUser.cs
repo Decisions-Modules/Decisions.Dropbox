@@ -1,9 +1,9 @@
 ﻿using System.Runtime.Serialization;
 
-namespace Decisions.DropboxApi.Data
+namespace Decisions.DropboxApi
 {
     [DataContract]
-    public class User
+    public class DropboxUser
     {
         [DataMember]
         public string DisplayedName { get; set; }
