@@ -24,7 +24,7 @@ namespace Decisions.DropboxApi
         protected const string resultOutcomeLabel = "Result";
         //protected const string doneOutcomeLabel = "Done";
         protected const string errorOutcomeDataLabel = "Error info";
-        protected const string resultLabel = "RESULT";
+        protected const string resultLabel = "Result";
 
         protected const string tokenLabel = "Token";
         protected const string fileOrFolderLabel = "File Or Folder Path";

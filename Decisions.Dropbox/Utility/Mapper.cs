@@ -44,19 +44,20 @@ namespace Decisions.DropboxApi
             {
                 Id = obj.Id,
                 Name = obj.Name,
-                Policy = obj.Policy,
+                //Policy = obj.Policy,
                 PreviewUrl = obj.PreviewUrl,
                 AccessType = Map(obj.AccessType),
-                ExpectedLinkMetadata = obj.ExpectedLinkMetadata,
-                LinkMetadata = obj.LinkMetadata,
+                //ExpectedLinkMetadata = obj.ExpectedLinkMetadata,
+                //LinkMetadata = obj.LinkMetadata,
                 OwnerDisplayNames = obj.OwnerDisplayNames?.ToArray(),
                 OwnerTeamId = obj.OwnerTeam?.Id,
                 OwnerTeamName = obj.OwnerTeam?.Name,
                 ParentSharedFolderId = obj.ParentSharedFolderId,
                 PathDisplay = obj.PathDisplay,
                 PathLower = obj.PathLower,
-                Permissions = obj.Permissions?.ToArray(),
-                TimeInvited = obj.TimeInvited
+                //Permissions = obj.Permissions?.ToArray(),
+                TimeInvited = obj.TimeInvited,
+                Url = obj.LinkMetadata?.Url
             };
         }
 
@@ -74,14 +75,14 @@ namespace Decisions.DropboxApi
             return new DropboxFolderMeta()
             {
                 Name = obj.Name,
-                Policy = obj.Policy,
+                //Policy = obj.Policy,
                 PreviewUrl = obj.PreviewUrl,
                 SharedFolderId = obj.SharedFolderId,
                 TimeInvited = obj.TimeInvited,
-                LinkMetadata = obj.LinkMetadata,
-                Permissions = obj.Permissions?.ToArray(),
-                AccessInheritance = obj.AccessInheritance,
-                AccessType = obj.AccessType,
+                //LinkMetadata = obj.LinkMetadata,
+                //Permissions = obj.Permissions?.ToArray(),
+                //AccessInheritance = obj.AccessInheritance,
+                AccessType = Map(obj.AccessType),
                 IsInsideTeamFolder = obj.IsInsideTeamFolder,
                 IsTeamFolder = obj.IsTeamFolder,
                 OwnerDisplayNames = obj.OwnerDisplayNames?.ToArray(),
@@ -90,6 +91,7 @@ namespace Decisions.DropboxApi
                 ParentSharedFolderId = obj.ParentSharedFolderId,
                 PathLower = obj.PathLower,
                 ParentFolderName = obj.ParentFolderName,
+                Url = obj.LinkMetadata?.Url
             };
 
         }

@@ -5,7 +5,7 @@ using Dropbox.Api.Sharing;
 
 namespace Decisions.DropboxApi
 {
-    [DataContract]
+   // [DataContract]
     public class DropboxFileMeta
     {
         /// <summary>
@@ -20,11 +20,11 @@ namespace Decisions.DropboxApi
         [DataMember]
         public string Name { get; set; }
 
-        /// <summary>
+       /* /// <summary>
         /// <para>Policies governing this shared file.</para>
         /// </summary>
         [DataMember]
-        public FolderPolicy Policy { get; set; }
+        public FolderPolicy Policy { get; set; }*/
 
         /// <summary>
         /// <para>URL for displaying a web preview of the shared file.</para>
@@ -38,20 +38,20 @@ namespace Decisions.DropboxApi
         [DataMember]
         public DropBoxAccessLevel AccessType { get; set; }
 
-        /// <summary>
+        /*/// <summary>
         /// <para>The expected metadata of the link associated for the file when it is first
         /// shared. Absent if the link already exists. This is for an unreleased feature so it
         /// may not be returned yet.</para>
         /// </summary>
         [DataMember]
-        public ExpectedSharedContentLinkMetadata ExpectedLinkMetadata { get; set; }
+        public ExpectedSharedContentLinkMetadata ExpectedLinkMetadata { get; set; }*/
 
-        /// <summary>
+        /*/// <summary>
         /// <para>The metadata of the link associated for the file. This is for an unreleased
         /// feature so it may not be returned yet.</para>
         /// </summary>
         [DataMember]
-        public SharedContentLinkMetadata LinkMetadata { get; set; }
+        public SharedContentLinkMetadata LinkMetadata { get; set; }*/
 
         /// <summary>
         /// <para>The display names of the users that own the file. If the file is part of a
@@ -92,12 +92,12 @@ namespace Decisions.DropboxApi
         [DataMember]
         public string PathLower { get; set; }
 
-        /// <summary>
+        /*/// <summary>
         /// <para>The sharing permissions that requesting user has on this file. This
         /// corresponds to the entries given in <see cref="P:Dropbox.Api.Sharing.GetFileMetadataBatchArg.Actions" /> or <see cref="P:Dropbox.Api.Sharing.GetFileMetadataArg.Actions" />.</para>
         /// </summary>
         [DataMember]
-        public FilePermission[] Permissions { get; set; }
+        public FilePermission[] Permissions { get; set; }*/
 
         /// <summary>
         /// <para>Timestamp indicating when the current user was invited to this shared file.
@@ -106,12 +106,11 @@ namespace Decisions.DropboxApi
         /// </summary>
         [DataMember]
         public DateTime? TimeInvited { get; set; }
+
+        [DataMember]
+        public string Url { get; set; }
     }
 
-   /* FolderPolicy
-    DropBoxAccessLevel    AccessLevel
-        ExpectedSharedContentLinkMetadata
-        SharedContentLinkMetadata
-        FilePermission*/
+
 
 }
