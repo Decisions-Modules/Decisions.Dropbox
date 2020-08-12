@@ -327,8 +327,5 @@ namespace Decisions.DropboxApi
                 return result.ToArray();
             }
         }
-
-
-
     }
 }

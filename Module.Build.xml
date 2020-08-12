@@ -9,7 +9,7 @@
     <CopyReferenceToModule>true</CopyReferenceToModule>
 	<References>
      <string>.\Decisions.Dropbox\bin\Debug\Dropbox.Api.dll</string>
-     <!--   <string>.\Decisions.Dropbox\bin\Debug\Newtonsoft.Json.dll</string> -->
+     <string>.\Decisions.Dropbox\bin\Debug\Newtonsoft.Json_7.dll</string>
 	</References>
   </Clients>
   <Resources NoComponents="true">
