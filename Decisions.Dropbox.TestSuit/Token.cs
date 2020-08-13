@@ -8,6 +8,6 @@ namespace Decisions.Dropbox.TestSuit
 {
     static class Token
     {
-        static string AccessToken { get; set; } = "put your token here";
+        static string AccessToken { get; } = "put your token here";
     }
 }
