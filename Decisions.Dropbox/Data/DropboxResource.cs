@@ -36,14 +36,19 @@ namespace Decisions.DropboxApi
     {
         [DataMember]
         public string Id { get; set; }
+
         [DataMember]
         public DateTime ClientModified { get; set; }
+
         [DataMember]
         public DateTime ServerModified { get; set; }
+
         [DataMember]
         public string Rev { get; set; }
+
         [DataMember]
         public ulong Size { get; set; }
+
         [DataMember]
         public bool IsDownloadable { get; set; }
     }

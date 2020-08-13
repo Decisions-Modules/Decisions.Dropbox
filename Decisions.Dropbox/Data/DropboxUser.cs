@@ -7,6 +7,7 @@ namespace Decisions.DropboxApi
     {
         [DataMember]
         public string DisplayedName { get; set; }
+
         [DataMember]
         public string Email { get; set; }
     }

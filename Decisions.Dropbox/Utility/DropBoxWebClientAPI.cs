@@ -129,9 +129,6 @@ namespace Decisions.DropboxApi
             }
         }
 
-        /// <summary>
-        ///     Get sharing settings for SPECIFIC folder by it's id
-        /// </summary>
         public static DropboxSharedFolderMetadata GetSharedFolderMetadata(string token, string sharedFolder)
         {
             CorrectDropboxPath(ref sharedFolder);
@@ -280,7 +277,7 @@ namespace Decisions.DropboxApi
             }
         }
 
-        public static void RemoveMemberFromFolder(string token, string sharedFolder, string memberEmail, int millisecondsTimeout = 30000 )
+        public static void RemoveMemberFromFolder(string token, string sharedFolder, string memberEmail, int millisecondsTimeout = 30000)
         {
             CorrectDropboxPath(ref sharedFolder);
 

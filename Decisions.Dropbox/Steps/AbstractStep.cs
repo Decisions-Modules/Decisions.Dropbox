@@ -22,7 +22,7 @@ namespace Decisions.DropboxApi
 
         protected const string errorOutcomeLabel = "Error";
         protected const string resultOutcomeLabel = "Result";
-        //protected const string doneOutcomeLabel = "Done";
+
         protected const string errorOutcomeDataLabel = "Error info";
         protected const string resultLabel = "Result";
 

@@ -24,6 +24,7 @@ namespace Decisions.DropboxApi
                 return base.InputData.Concat(data).ToArray();
             }
         }
+
         public override OutcomeScenarioData[] OutcomeScenarios
         {
             get

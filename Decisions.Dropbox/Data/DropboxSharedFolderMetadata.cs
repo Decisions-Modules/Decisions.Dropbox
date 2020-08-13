@@ -14,9 +14,6 @@ namespace Decisions.DropboxApi
         [DataMember]
         public string Name { get; set; }
 
-        /*[DataMember]
-        public FolderPolicy Policy { get;  set; }*/
-
         [DataMember]
         public string PreviewUrl { get; set; }
 
@@ -25,15 +22,6 @@ namespace Decisions.DropboxApi
 
         [DataMember]
         public DateTime TimeInvited { get; set; }
-
-        /*[DataMember]
-        public SharedContentLinkMetadata LinkMetadata { get; set; }
-
-        [DataMember]
-        public FolderPermission[] Permissions { get; set; }
-
-        [DataMember]
-        public AccessInheritance AccessInheritance { get; set; }*/
 
         public DropBoxAccessLevel AccessType { get; set; }
         
@@ -62,8 +50,6 @@ namespace Decisions.DropboxApi
         [DataMember]
         public string ParentFolderName { get; set; }
 
-        [DataMember]
-        public string Url { get; set; }
     }
 
 }

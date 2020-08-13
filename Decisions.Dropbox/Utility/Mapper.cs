@@ -42,7 +42,6 @@ namespace Decisions.DropboxApi
                 PathDisplay = obj.PathDisplay,
                 PathLower = obj.PathLower,
                 TimeInvited = obj.TimeInvited,
-                Url = obj.LinkMetadata?.Url
             };
         }
 
@@ -72,7 +71,6 @@ namespace Decisions.DropboxApi
                 ParentSharedFolderId = obj.ParentSharedFolderId,
                 PathLower = obj.PathLower,
                 ParentFolderName = obj.ParentFolderName,
-                Url = obj.LinkMetadata?.Url
             };
 
         }
@@ -89,6 +87,8 @@ namespace Decisions.DropboxApi
 
         internal static DropboxFile MapFile(Metadata data)
         {
+            if (data == null) return null;
+
             var res = new DropboxFile();
             FillDropboxResource(res, data);
 
@@ -106,6 +106,8 @@ namespace Decisions.DropboxApi
 
         internal static DropboxFolder MapFolder(Metadata data)
         {
+            if (data == null) return null;
+
             var res = new DropboxFolder();
             FillDropboxResource(res, data);
 
