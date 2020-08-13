@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+    using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,35 +11,37 @@ using DecisionsFramework.Design.Properties;
 
 namespace Decisions.DropboxApi
 {
-    [AutoRegisterStep("Download File", DropboxCategory)]
+    [AutoRegisterStep("Get Folder Members", DropboxCategory)]
     [Writable]
-    public class DownloadFile : AbstractStep
+    public class GetFolderMembers : AbstractStep
     {
         [PropertyHidden]
         public override DataDescription[] InputData
         {
             get
             {
-                var data = new DataDescription[] { new DataDescription(typeof(string), fileLabel), new DataDescription(typeof(string), localFolderPathLabel) };
+                var data = new DataDescription[] { new DataDescription(typeof(string), folderLabel) };
                 return base.InputData.Concat(data).ToArray();
             }
         }
+
         public override OutcomeScenarioData[] OutcomeScenarios
         {
             get
             {
-                var data = new OutcomeScenarioData[] { new OutcomeScenarioData(resultOutcomeLabel) };
+                var data = new OutcomeScenarioData[] { new OutcomeScenarioData(resultOutcomeLabel, new DataDescription(typeof(DropboxUser[]), resultLabel)) };
                 return base.OutcomeScenarios.Concat(data).ToArray();
             }
         }
 
         protected override Object ExecuteStep(string token, StepStartData data)
         {
-            var file = (string)data.Data[fileLabel];
-            var localFolderPath = (string)data.Data[localFolderPathLabel];
+            var folder = (string)data.Data[folderLabel];
 
-            DropBoxWebClientAPI.DownloadFile(token, file, localFolderPath);
-            return null;
+            return DropBoxWebClientAPI.FolderMembersArray(token, folder);
         }
     }
 }
+
+
+

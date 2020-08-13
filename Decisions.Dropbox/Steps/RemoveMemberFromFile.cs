@@ -1,28 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Decisions.DropboxApi;
 using DecisionsFramework.Design.ConfigurationStorage.Attributes;
 using DecisionsFramework.Design.Flow;
 using DecisionsFramework.Design.Flow.Mapping;
 using DecisionsFramework.Design.Properties;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Decisions.DropboxApi
 {
-    [AutoRegisterStep("Download File", DropboxCategory)]
+    [AutoRegisterStep("Remove Member from File", DropboxCategory)]
     [Writable]
-    public class DownloadFile : AbstractStep
+    class RemoveMemberFromFile : AbstractStep
     {
         [PropertyHidden]
         public override DataDescription[] InputData
         {
             get
             {
-                var data = new DataDescription[] { new DataDescription(typeof(string), fileLabel), new DataDescription(typeof(string), localFolderPathLabel) };
+                var data = new DataDescription[] { new DataDescription(typeof(string), fileLabel),
+                                                   new DataDescription(typeof(string), EmailLabel),
+                                                 };
                 return base.InputData.Concat(data).ToArray();
             }
         }
+
         public override OutcomeScenarioData[] OutcomeScenarios
         {
             get
@@ -34,11 +38,15 @@ namespace Decisions.DropboxApi
 
         protected override Object ExecuteStep(string token, StepStartData data)
         {
-            var file = (string)data.Data[fileLabel];
-            var localFolderPath = (string)data.Data[localFolderPathLabel];
+            var filePath = (string)data.Data[fileLabel];
+            var email = (string)data.Data[EmailLabel];
 
-            DropBoxWebClientAPI.DownloadFile(token, file, localFolderPath);
+            DropBoxWebClientAPI.RemoveMemberFromFile(token, filePath, email);
             return null;
         }
     }
 }
+
+
+
+

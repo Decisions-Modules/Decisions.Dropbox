@@ -8,7 +8,7 @@ using DecisionsFramework.Design.Flow;
 using DecisionsFramework.Design.Flow.Mapping;
 using DecisionsFramework.Design.Properties;
 
-namespace Decisions.DropboxApi.Steps
+namespace Decisions.DropboxApi
 {
 
     [AutoRegisterStep("Get Folder List", DropboxCategory)]
@@ -29,7 +29,7 @@ namespace Decisions.DropboxApi.Steps
         {
             get
             {
-                var data = new OutcomeScenarioData[] { new OutcomeScenarioData(resultOutcomeLabel, new DataDescription(typeof(DropboxResource[]), resultLabel)) };
+                var data = new OutcomeScenarioData[] { new OutcomeScenarioData(resultOutcomeLabel, new DataDescription(typeof(DropboxFolder[]), resultLabel)) };
                 return base.OutcomeScenarios.Concat(data).ToArray();
             }
         }

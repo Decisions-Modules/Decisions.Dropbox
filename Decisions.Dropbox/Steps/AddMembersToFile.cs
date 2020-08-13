@@ -11,33 +11,43 @@ using System.Threading.Tasks;
 
 namespace Decisions.DropboxApi
 {
-    [AutoRegisterStep("Create Folder", DropboxCategory)]
+    [AutoRegisterStep("Add Members to File", DropboxCategory)]
     [Writable]
-    class CreateFolder : AbstractStep
+    class AddMembersToFile : AbstractStep
     {
         [PropertyHidden]
         public override DataDescription[] InputData
         {
             get
             {
-                var data = new DataDescription[] { new DataDescription(typeof(string), newFolderPathLabel) };
+                var data = new DataDescription[] { new DataDescription(typeof(string), fileLabel), 
+                                                   new DataDescription(typeof(DropBoxAccessLevel), AccessLevelLabel),
+                                                   new DataDescription(typeof(string[]), EmailsLabel),
+                                                  };
                 return base.InputData.Concat(data).ToArray();
             }
         }
+
         public override OutcomeScenarioData[] OutcomeScenarios
         {
             get
             {
-                var data = new OutcomeScenarioData[] { new OutcomeScenarioData(resultOutcomeLabel, new DataDescription(typeof(DropboxResource), resultLabel)) };
+                var data = new OutcomeScenarioData[] { new OutcomeScenarioData(resultOutcomeLabel) };
                 return base.OutcomeScenarios.Concat(data).ToArray();
             }
         }
 
         protected override Object ExecuteStep(string token, StepStartData data)
         {
-            var folderPath = (string)data.Data[newFolderPathLabel];
+            var filePath = (string)data.Data[fileLabel];
+            var accessLevel = (DropBoxAccessLevel)data.Data[AccessLevelLabel];
+            var emails = (string[])data.Data[EmailsLabel];
 
-            return DropBoxWebClientAPI.CreateFolder(token, folderPath);
+            DropBoxWebClientAPI.AddMembersToFile(token, filePath, accessLevel, emails);
+
+            return null;
         }
     }
 }
+
+

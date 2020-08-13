@@ -10,24 +10,25 @@ using DecisionsFramework.Design.Properties;
 
 namespace Decisions.DropboxApi
 {
-    [AutoRegisterStep("Download File", DropboxCategory)]
+    [AutoRegisterStep("Get Shared File Metadata", DropboxCategory)]
     [Writable]
-    public class DownloadFile : AbstractStep
+    public class GetSharedFileMetadata : AbstractStep
     {
         [PropertyHidden]
         public override DataDescription[] InputData
         {
             get
             {
-                var data = new DataDescription[] { new DataDescription(typeof(string), fileLabel), new DataDescription(typeof(string), localFolderPathLabel) };
+                var data = new DataDescription[] { new DataDescription(typeof(string), fileLabel) };
                 return base.InputData.Concat(data).ToArray();
             }
         }
+
         public override OutcomeScenarioData[] OutcomeScenarios
         {
             get
             {
-                var data = new OutcomeScenarioData[] { new OutcomeScenarioData(resultOutcomeLabel) };
+                var data = new OutcomeScenarioData[] { new OutcomeScenarioData(resultOutcomeLabel, new DataDescription(typeof(DropboxSharedFileMetadata), resultLabel)) };
                 return base.OutcomeScenarios.Concat(data).ToArray();
             }
         }
@@ -35,10 +36,8 @@ namespace Decisions.DropboxApi
         protected override Object ExecuteStep(string token, StepStartData data)
         {
             var file = (string)data.Data[fileLabel];
-            var localFolderPath = (string)data.Data[localFolderPathLabel];
 
-            DropBoxWebClientAPI.DownloadFile(token, file, localFolderPath);
-            return null;
+            return DropBoxWebClientAPI.GetSharedFileMetadata(token, file);
         }
     }
 }

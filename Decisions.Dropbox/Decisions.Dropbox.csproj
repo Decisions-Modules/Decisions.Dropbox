@@ -42,22 +42,33 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\DropBoxException.cs" />
-    <Compile Include="Data\DropboxFolderMeta.cs" />
+    <Compile Include="Data\DropboxSharedFolderMetadata.cs" />
     <Compile Include="Data\DropBoxAccessLevel.cs" />
     <Compile Include="Steps\AbstractStep.cs" />
+    <Compile Include="Steps\AddMembersToFile.cs" />
+    <Compile Include="Steps\AddMembersToFolder.cs" />
     <Compile Include="Steps\CreateFolder.cs" />
+    <Compile Include="Steps\CreateSharedLink.cs" />
     <Compile Include="Steps\DeleteResource.cs" />
     <Compile Include="Steps\DoesResourceExist.cs" />
     <Compile Include="Steps\DownloadFile.cs" />
+    <Compile Include="Steps\GetFolderMembers.cs" />
     <Compile Include="Steps\GetFileList.cs" />
-    <Compile Include="Steps\GetFileMetadata.cs" />
+    <Compile Include="Steps\GetFileMembers.cs" />
+    <Compile Include="Steps\GetSharedFileMetadata.cs" />
     <Compile Include="Steps\GetFolderList.cs" />
-    <Compile Include="Steps\GetFolderMetadata.cs" />
+    <Compile Include="Steps\GetSharedFolderMetadata.cs" />
+    <Compile Include="Steps\RemoveMemberFromFile.cs" />
+    <Compile Include="Steps\RemoveMemberFromFolder.cs" />
+    <Compile Include="Steps\RevokeSharedLink.cs" />
+    <Compile Include="Steps\ShareFolder.cs" />
+    <Compile Include="Steps\UnshareFile.cs" />
+    <Compile Include="Steps\UnshareFolder.cs" />
     <Compile Include="Steps\UploadFile.cs" />
     <Compile Include="Utility\DropBoxWebClientAPI.cs" />
     <Compile Include="Utility\Mapper.cs" />
     <Compile Include="Data\DropboxResource.cs" />
-    <Compile Include="Data\DropboxFileMeta.cs" />
+    <Compile Include="Data\DropboxSharedFileMetadata.cs" />
     <Compile Include="Data\DropboxUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\DropBoxWebClientBaseAPI.cs" />

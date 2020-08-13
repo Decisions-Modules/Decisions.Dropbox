@@ -1,25 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Decisions.DropboxApi;
 using DecisionsFramework.Design.ConfigurationStorage.Attributes;
 using DecisionsFramework.Design.Flow;
 using DecisionsFramework.Design.Flow.Mapping;
 using DecisionsFramework.Design.Properties;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Decisions.DropboxApi
 {
-    [AutoRegisterStep("Download File", DropboxCategory)]
+    [AutoRegisterStep("Create Shared Link", DropboxCategory)]
     [Writable]
-    public class DownloadFile : AbstractStep
+    class CreateSharedLink : AbstractStep
     {
         [PropertyHidden]
         public override DataDescription[] InputData
         {
             get
             {
-                var data = new DataDescription[] { new DataDescription(typeof(string), fileLabel), new DataDescription(typeof(string), localFolderPathLabel) };
+                var data = new DataDescription[] { new DataDescription(typeof(string), fileOrFolderLabel) };
                 return base.InputData.Concat(data).ToArray();
             }
         }
@@ -27,18 +28,17 @@ namespace Decisions.DropboxApi
         {
             get
             {
-                var data = new OutcomeScenarioData[] { new OutcomeScenarioData(resultOutcomeLabel) };
+                var data = new OutcomeScenarioData[] { new OutcomeScenarioData(resultOutcomeLabel, new DataDescription(typeof(string), resultLabel)) };
                 return base.OutcomeScenarios.Concat(data).ToArray();
             }
         }
 
         protected override Object ExecuteStep(string token, StepStartData data)
         {
-            var file = (string)data.Data[fileLabel];
-            var localFolderPath = (string)data.Data[localFolderPathLabel];
+            var path = (string)data.Data[fileOrFolderLabel];
 
-            DropBoxWebClientAPI.DownloadFile(token, file, localFolderPath);
-            return null;
+            return DropBoxWebClientAPI.CreateSharedLink(token, path);
         }
     }
 }
+

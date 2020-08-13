@@ -8,18 +8,18 @@ using DecisionsFramework.Design.Flow;
 using DecisionsFramework.Design.Flow.Mapping;
 using DecisionsFramework.Design.Properties;
 
-namespace Decisions.DropboxApi.Steps
+namespace Decisions.DropboxApi
 {
-    [AutoRegisterStep("Get Folder Metadata", DropboxCategory)]
+    [AutoRegisterStep("Get File Members", DropboxCategory)]
     [Writable]
-    class GetFolderMetadata : AbstractStep
+    public class GetFileMembers : AbstractStep
     {
         [PropertyHidden]
         public override DataDescription[] InputData
         {
             get
             {
-                var data = new DataDescription[] { new DataDescription(typeof(string), folderLabel) };
+                var data = new DataDescription[] { new DataDescription(typeof(string), fileLabel) };
                 return base.InputData.Concat(data).ToArray();
             }
         }
@@ -28,15 +28,18 @@ namespace Decisions.DropboxApi.Steps
         {
             get
             {
-                var data = new OutcomeScenarioData[] { new OutcomeScenarioData(resultOutcomeLabel, new DataDescription(typeof(DropboxFolderMeta), nameof(GetFolderMetadata) + resultLabel)) };
+                var data = new OutcomeScenarioData[] { new OutcomeScenarioData(resultOutcomeLabel, new DataDescription(typeof(DropboxUser[]), resultLabel)) };
                 return base.OutcomeScenarios.Concat(data).ToArray();
             }
         }
 
         protected override Object ExecuteStep(string token, StepStartData data)
         {
-            var folder = (string)data.Data[folderLabel];
-            return DropBoxWebClientAPI.GetFolderMetadata(token, folder);
+            var file = (string)data.Data[fileLabel];
+
+            return DropBoxWebClientAPI.FileMembersArray(token, file);
         }
     }
 }
+
+

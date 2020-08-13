@@ -32,8 +32,11 @@ namespace Decisions.DropboxApi
         protected const string folderLabel = "Folder Path";
         protected const string localFilePathLabel = "Local File Path";
         protected const string localFolderPathLabel = "Local Folder Path";
-
-        protected const string newFolderPath = "New Folder Path";
+        protected const string urlLabel = "Shared Link (URL)";
+        protected const string newFolderPathLabel = "New Folder Path";
+        protected const string AccessLevelLabel = "Access Level";
+        protected const string EmailsLabel = "Emails";
+        protected const string EmailLabel = "Email";
 
         [PropertyHidden]
         public virtual DataDescription[] InputData

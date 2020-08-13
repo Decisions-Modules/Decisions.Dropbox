@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System;
 using System.Runtime.Serialization;
 
 namespace Decisions.DropboxApi
@@ -29,4 +30,32 @@ namespace Decisions.DropboxApi
         [DataMember]
         public string ParentSharedFolderId { get; set; }
     }
+
+    [DataContract]
+    public class DropboxFile : DropboxResource
+    {
+        [DataMember]
+        public string Id { get; set; }
+        [DataMember]
+        public DateTime ClientModified { get; set; }
+        [DataMember]
+        public DateTime ServerModified { get; set; }
+        [DataMember]
+        public string Rev { get; set; }
+        [DataMember]
+        public ulong Size { get; set; }
+        [DataMember]
+        public bool IsDownloadable { get; set; }
+    }
+
+    [DataContract]
+    public class DropboxFolder : DropboxResource
+    {
+        [DataMember]
+        public string Id { get; set; }
+
+        [DataMember]
+        public string SharedFolderId { get; set; }
+    }
+
 }

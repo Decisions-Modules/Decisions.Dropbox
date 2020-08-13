@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Decisions.DropboxApi
 {
     [DataContract]
-    public class DropboxFolderMeta
+    public class DropboxSharedFolderMetadata
     {
         [DataMember]
         public string Name { get; set; }

@@ -5,8 +5,8 @@ using Dropbox.Api.Sharing;
 
 namespace Decisions.DropboxApi
 {
-   // [DataContract]
-    public class DropboxFileMeta
+    [DataContract]
+    public class DropboxSharedFileMetadata
     {
         /// <summary>
         /// <para>The ID of the file.</para>

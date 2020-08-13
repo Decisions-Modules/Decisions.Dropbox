@@ -179,12 +179,12 @@ namespace Decisions.DropboxApi.TestSuit
         [TestMethod]
         public void ShareFolderTest()
         {
-            DropboxFolderMeta sharedMeta1 = null, sharedMetaAgain1, sharedMeta2 = null;
+            DropboxSharedFolderMetadata sharedMeta1 = null, sharedMetaAgain1, sharedMeta2 = null;
 
             try
             {
                 sharedMeta1 = DropBoxWebClientAPI.ShareFolder(Token.AccessToken, TestData.TestFolder, 10000, false);
-                sharedMetaAgain1 = DropBoxWebClientAPI.GetFolderSharingSettings(Token.AccessToken, TestData.TestFolder);
+                sharedMetaAgain1 = DropBoxWebClientAPI.GetSharedFolderMetadata(Token.AccessToken, TestData.TestFolder);
 
                 DropBoxWebClientAPI.UnshareFolder(Token.AccessToken, TestData.TestFolder);
 
@@ -220,7 +220,7 @@ namespace Decisions.DropboxApi.TestSuit
             string fileUrl = DropBoxWebClientAPI.CreateSharedLink(Token.AccessToken, remoteFile);
             Assert.IsNotNull(fileUrl);
 
-            DropboxFileMeta fileMeta = DropBoxWebClientAPI.GetFileSharingSettings(Token.AccessToken, remoteFile);
+            DropboxSharedFileMetadata fileMeta = DropBoxWebClientAPI.GetSharedFileMetadata(Token.AccessToken, remoteFile);
             DropBoxWebClientAPI.RevokeSharedLink(Token.AccessToken, fileUrl);
 
             bool revokeError = false;

@@ -13,11 +13,25 @@ namespace Decisions.DropboxApi
         [DataMember]
         public string ErrorMessage { get; set; }
 
-        internal static DropboxErrorInfo FromException(Exception ex)
+        internal static DropboxErrorInfo FromException(Exception exception)
         {
+            var messages = new StringBuilder();
+
+            if (exception is System.AggregateException)
+            {
+                var exceptions = (exception as System.AggregateException).InnerExceptions;
+                foreach (var ex in exceptions)
+                {
+                    if (messages.Length > 0) messages.AppendLine();
+                    messages.Append(ex.Message ?? ex.ToString());
+                }
+            }
+            else
+                messages.Append(exception.Message ?? exception.ToString());
+
             return new DropboxErrorInfo()
             {
-                ErrorMessage = (ex.Message ?? ex.ToString()),
+                ErrorMessage = (messages.ToString()),
             };
         }
 

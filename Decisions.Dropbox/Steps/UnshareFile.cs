@@ -1,25 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Decisions.DropboxApi;
 using DecisionsFramework.Design.ConfigurationStorage.Attributes;
 using DecisionsFramework.Design.Flow;
 using DecisionsFramework.Design.Flow.Mapping;
 using DecisionsFramework.Design.Properties;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Decisions.DropboxApi
 {
-    [AutoRegisterStep("Download File", DropboxCategory)]
+    [AutoRegisterStep("Unshare File", DropboxCategory)]
     [Writable]
-    public class DownloadFile : AbstractStep
+    class UnshareFile : AbstractStep
     {
         [PropertyHidden]
         public override DataDescription[] InputData
         {
             get
             {
-                var data = new DataDescription[] { new DataDescription(typeof(string), fileLabel), new DataDescription(typeof(string), localFolderPathLabel) };
+                var data = new DataDescription[] { new DataDescription(typeof(string), fileLabel) };
                 return base.InputData.Concat(data).ToArray();
             }
         }
@@ -34,11 +35,11 @@ namespace Decisions.DropboxApi
 
         protected override Object ExecuteStep(string token, StepStartData data)
         {
-            var file = (string)data.Data[fileLabel];
-            var localFolderPath = (string)data.Data[localFolderPathLabel];
-
-            DropBoxWebClientAPI.DownloadFile(token, file, localFolderPath);
+            var filePath = (string)data.Data[fileLabel];
+            DropBoxWebClientAPI.UnshareFile(token, filePath);
             return null;
         }
     }
 }
+
+
