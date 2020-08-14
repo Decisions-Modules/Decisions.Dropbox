@@ -2,7 +2,7 @@
 ## Preparation
 You need to create your Dropbox application in the developer console: https://www.dropbox.com/developers/apps
 
-If you created “scoped access” application, you should enable scopes:<br />
+For this application you should enable scopes:<br />
 &nbsp;&nbsp; ***files.content.read    <br />
 &nbsp;&nbsp; files.content.write   <br />
 &nbsp;&nbsp; files.metadata.read   <br />
