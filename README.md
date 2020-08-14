@@ -3,19 +3,13 @@
 You need to create your Dropbox application in the developer console: https://www.dropbox.com/developers/apps
 
 If you created “scoped access” application, you should enable scopes:<br />
-&nbsp;&nbsp; files.content.read    <br />
+&nbsp;&nbsp; ***files.content.read    <br />
 &nbsp;&nbsp; files.content.write   <br />
 &nbsp;&nbsp; files.metadata.read   <br />
 &nbsp;&nbsp; sharing.read    <br />
-&nbsp;&nbsp; sharing.write   <br />
-&nbsp;&nbsp; file_requests.write   <br />
-&nbsp;&nbsp; members.read  <br />
-&nbsp;&nbsp; members.write   <br />
-&nbsp;&nbsp; members.delete   <br />
-&nbsp;&nbsp; team_data.member   <br /> 
+&nbsp;&nbsp; sharing.write***   <br />
 
-Add Redirect URI:
-http://localhost/decisions/HandleTokenResponse.aspx 
+Add Redirect URI, for testing purpose you may use http://localhost/decisions/HandleTokenResponse.aspx 
 
 More information you may find  https://www.dropbox.com/developers/documentation
 
