@@ -20,7 +20,8 @@ namespace Decisions.DropboxApi
         {
             get
             {
-                var data = new DataDescription[] { new DataDescription(typeof(string), fileLabel),
+                var data = new DataDescription[] {
+                                                   new DataDescription(typeof(string), fileLabel),
                                                    new DataDescription(typeof(string), EmailLabel),
                                                  };
                 return base.InputData.Concat(data).ToArray();

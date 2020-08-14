@@ -20,10 +20,11 @@ namespace Decisions.DropboxApi
         {
             get
             {
-                var data = new DataDescription[] { new DataDescription(typeof(string), folderLabel),
+                var data = new DataDescription[] {
+                                                   new DataDescription(typeof(string), folderLabel),
                                                    new DataDescription(typeof(DropBoxAccessLevel), AccessLevelLabel),
                                                    new DataDescription(typeof(string[]), EmailsLabel),
-                                                  };
+                                                 };
                 return base.InputData.Concat(data).ToArray();
             }
         }
