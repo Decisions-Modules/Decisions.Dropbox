@@ -6,6 +6,7 @@
     </PropertyGroup>
     <Target Name="build_all">
         <Exec Command="dotnet publish .\Decisions.Dropbox\Decisions.Dropbox.csproj --runtime win-x64 --self-contained false --output .\Decisions.Dropbox\obj -c Debug" />
+		<Exec Command="dotnet tool update --global CreateDecisionsModule-GlobalTool" />
         <CallTarget Targets="build_module"/>
     </Target>
     <Target Name="build_module">
