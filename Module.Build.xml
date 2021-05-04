@@ -1,40 +1,19 @@
 <?xml version="1.0"?>
 <CreateModuleInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Clients>
-    <DotNetCoreDll>.\packages\DecisionsSDK.6.8.0\lib\CoreServicesClients.Net.dll</DotNetCoreDll>
-    <DotNetFrontendFrameworkDll>.\packages\DecisionsSDK.6.8.0\lib\DecisionsFramework.Net.dll</DotNetFrontendFrameworkDll>
-    <SLCoreDll></SLCoreDll>
-    <SLFrontendFrameworkDll></SLFrontendFrameworkDll>
-    <SilverLightsSDKAssembliesPath></SilverLightsSDKAssembliesPath>
-    <CopyReferenceToModule>true</CopyReferenceToModule>
-	<References>
-       <string>.\Decisions.Dropbox\bin\Debug\Dropbox.Api.dll</string>
-    <!--<string>.\Decisions.Dropbox\bin\Debug\Newtonsoft.Json_7.dll</string>-->
-	</References>
-  </Clients>
-  <Resources NoComponents="true">
-    <ServicesDlls>
-      <string>.\Decisions.Dropbox\bin\Debug\Decisions.Dropbox.dll</string>
-    </ServicesDlls>
-    <CliDlls/>
-    <WebPages/>
-	<MvcViews>
-	</MvcViews>
-	<MvcDlls>
-	</MvcDlls>
-    <AgentDlls>
-    </AgentDlls>
-    <InstallScript>
-    </InstallScript>
-    <SqlScripts />
-    <ObjectsToImport></ObjectsToImport>
-    <MsSqlScript>
-    </MsSqlScript>
-    <MySqlScript>
-    </MySqlScript>
-    <OracleScript>
-    </OracleScript>
-    <FileResources>    </FileResources>
-  </Resources>
+	<Resources NoComponents="true">
+		<CoreServicesDlls>
+		  <string>.\Decisions.Dropbox\obj\Debug\net5.0\win-x64\Decisions.Dropbox.dll</string>
+		</CoreServicesDlls>
+		<CliDlls/>
+		<WebPages/>
+		<SilverlightDlls/>
+		<AgentDlls/>
+		<InstallScript/>
+		<SqlScripts/>
+		<ObjectsToImport/>
+		<MsSqlScript/>
+	</Resources>
+	<Version/>
+	<ImagePath>./image.png</ImagePath>
   <Description>Module to manage files and folders in Dropbox.</Description>
 </CreateModuleInfo>
