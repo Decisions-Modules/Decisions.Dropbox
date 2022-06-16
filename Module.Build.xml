@@ -4,6 +4,9 @@
 		<CoreServicesDlls>
 		  <string>.\Decisions.Dropbox\obj\Debug\net6.0\win-x64\Decisions.Dropbox.dll</string>
 		</CoreServicesDlls>
+		<ReferenceDlls>
+			<string>.\Decisions.DropBox\obj\Dropbox.Api.dll</string>
+		</ReferenceDlls>
 		<CliDlls/>
 		<WebPages/>
 		<SilverlightDlls/>
