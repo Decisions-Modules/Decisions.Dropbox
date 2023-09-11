@@ -1,0 +1,22 @@
+{
+    "Resources": {
+		"NoComponents": true,
+		"CoreServicesDlls": [
+			"./Decisions.Dropbox/obj/Decisions.Dropbox.dll"
+		],
+		"ReferenceDlls": [
+			"./Decisions.DropBox/obj/Dropbox.Api.dll"
+		],
+		"CliDlls": null,
+		"WebPages": null,
+		"SilverlightDlls": null,
+		"AgentDlls": null,
+		"InstallScript": null,
+		"SqlScripts": null,
+		"ObjectsToImport": null,
+		"MsSqlScript": null
+    },
+    "Version": "8.15.0",
+    "ImagePath": "./image.png",
+    "Description": "Module to manage files and folders in Dropbox."
+}
