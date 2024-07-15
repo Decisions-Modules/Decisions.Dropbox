@@ -12,11 +12,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DecisionsFramework.Design.Flow.CoreSteps;
 
 namespace Decisions.DropboxApi
 {
     [Writable]
-    public abstract class AbstractStep : ISyncStep, IDataConsumer, IDataProducer, IValidationSource
+    public abstract class AbstractStep : BaseFlowAwareStep, ISyncStep, IDataConsumer, IDataProducer, IValidationSource
     {
         public const string DropboxCategory = "Integration/Dropbox";
 
@@ -49,7 +50,7 @@ namespace Decisions.DropboxApi
 
         private const int errorOutcomeIndex = 0;
         private const int resultOutcomeIndex = 1;
-        public virtual OutcomeScenarioData[] OutcomeScenarios
+        public override OutcomeScenarioData[] OutcomeScenarios
         {
             get
             {
